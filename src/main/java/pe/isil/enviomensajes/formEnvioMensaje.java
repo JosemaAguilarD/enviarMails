@@ -4,6 +4,7 @@
  */
 package pe.isil.enviomensajes;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -11,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import static pe.isil.enviomensajes.EnvioMensajes.correos;
 import static pe.isil.enviomensajes.EnvioMensajes.enviarCorreosMasivos;
@@ -26,6 +28,7 @@ public class formEnvioMensaje extends javax.swing.JFrame {
     public formEnvioMensaje() {
         initComponents();
         lblCorreoMensaje.setVisible(false);
+        lblAcomArchivo.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +49,9 @@ public class formEnvioMensaje extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         lblCorreoMensaje = new javax.swing.JLabel();
+        btnArchivos = new javax.swing.JButton();
+        lbArchivo = new javax.swing.JLabel();
+        lblAcomArchivo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setForeground(java.awt.Color.red);
@@ -61,7 +67,7 @@ public class formEnvioMensaje extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
@@ -113,6 +119,19 @@ public class formEnvioMensaje extends javax.swing.JFrame {
         lblCorreoMensaje.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
         lblCorreoMensaje.setForeground(new java.awt.Color(255, 0, 0));
 
+        btnArchivos.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        btnArchivos.setText("AgregarArchivo...");
+        btnArchivos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArchivosActionPerformed(evt);
+            }
+        });
+
+        lbArchivo.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+
+        lblAcomArchivo.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        lblAcomArchivo.setText("archivo:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,9 +151,17 @@ public class formEnvioMensaje extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblCorreoMensaje))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(593, 593, 593))
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnArchivos)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblAcomArchivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lbArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,27 +171,39 @@ public class formEnvioMensaje extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCorreoEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCorreoMensaje))
-                        .addGap(18, 18, 18)
-                        .addComponent(txtAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnInsertar)
-                        .addGap(31, 31, 31))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtCorreoEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCorreoMensaje))
+                                .addGap(18, 18, 18)
+                                .addComponent(txtAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnInsertar)
+                                .addGap(31, 31, 31))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(btnArchivos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lbArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblAcomArchivo))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
             
             if(txtPanel.getText().trim().isEmpty() && txtCorreoEnviar.getText().trim().isEmpty()){
@@ -176,20 +215,20 @@ public class formEnvioMensaje extends javax.swing.JFrame {
             else if(txtPanel.getText().trim().isEmpty() && !txtCorreoEnviar.getText().trim().isEmpty()){
                 System.out.println("Entro condición 2");
                 correos.add(txtCorreoEnviar.getText()); 
-                envioMensaje.enviarCorreosMasivos(correos, txtAsunto.getText(), txtTexto.getText());
+                envioMensaje.enviarCorreosMasivos(correos, txtAsunto.getText(), txtTexto.getText(), lbArchivo.getText());
                 correos.clear();
                 
             }else if(!txtPanel.getText().trim().isEmpty() && !txtCorreoEnviar.getText().trim().isEmpty()){
                                 System.out.println("Entro condición 3");
 
                 correos.add(txtCorreoEnviar.getText()); 
-                envioMensaje.enviarCorreosMasivos(correos, txtAsunto.getText(), txtTexto.getText());
+                envioMensaje.enviarCorreosMasivos(correos, txtAsunto.getText(), txtTexto.getText(), lbArchivo.getText());
                 correos.clear();
             }
             else if(!txtPanel.getText().trim().isEmpty() && txtCorreoEnviar.getText().trim().isEmpty()){
                                 System.out.println("Entro condición 4");
 
-                envioMensaje.enviarCorreosMasivos(correos, txtAsunto.getText(), txtTexto.getText());
+                envioMensaje.enviarCorreosMasivos(correos, txtAsunto.getText(), txtTexto.getText(), lbArchivo.getText());
                 correos.clear();
             }
             
@@ -225,6 +264,30 @@ public class formEnvioMensaje extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_txtCorreoEnviarKeyReleased
+
+    private void btnArchivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivosActionPerformed
+         formEnvioMensaje formEnvio = new formEnvioMensaje();
+         JFileChooser fileChooser = new JFileChooser();
+         int seleccion = fileChooser.showOpenDialog(formEnvio);
+         
+         if (seleccion == JFileChooser.APPROVE_OPTION)
+            {
+            File fichero = fileChooser.getSelectedFile();
+                lbArchivo.setText(fichero.getAbsolutePath());
+                lblAcomArchivo.setVisible(true);
+                System.out.println(fichero.getAbsolutePath());
+
+            }
+         else if(seleccion == JFileChooser.CANCEL_OPTION){
+                lbArchivo.setText("");
+                System.out.println("Cancelado");
+            }
+         else if(seleccion == JFileChooser.ERROR_OPTION){
+                lbArchivo.setText("");      
+                System.out.println("Error");
+            }
+         
+    }//GEN-LAST:event_btnArchivosActionPerformed
 
     public boolean verificar_Email(String correo){
         Pattern patron = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -267,7 +330,7 @@ public class formEnvioMensaje extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(formEnvioMensaje.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+       
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -277,6 +340,7 @@ public class formEnvioMensaje extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnArchivos;
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -286,6 +350,8 @@ public class formEnvioMensaje extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbArchivo;
+    private javax.swing.JLabel lblAcomArchivo;
     private javax.swing.JLabel lblCorreoMensaje;
     private javax.swing.JTextField txtAsunto;
     private javax.swing.JTextField txtCorreoEnviar;

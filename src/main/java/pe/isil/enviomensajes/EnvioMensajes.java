@@ -21,8 +21,8 @@ import javax.mail.internet.MimeMultipart;
  */
 public class EnvioMensajes {
 
-        public static String emailEnvia = "josemariaaguilar8999@gmail.com";
-	public static String passwordEnvia = "durtqoexbzhgmmhi";
+        public static String emailEnvia = "pruebasprueba793@gmail.com";
+	public static String passwordEnvia = "kszptvospquvctec";
 	public static String emailRecibe;
 	public static String asunto;
 	public static String contenido;
@@ -30,10 +30,10 @@ public class EnvioMensajes {
 	public static Properties mProperties = new Properties();
 	public static Session mSession;
 	public static MimeMessage mCorreo;
-	
+	public static String mArchivo;
 
 	
-	public static void crearEmail(String emailRecibe, String asunto, String contenido) {
+	public static void crearEmail(String emailRecibe, String asunto, String contenido, String mArchivo) {
 		
 		//Simple mail transfer protocol (SMTP)
 		mProperties.put("mail.smtp.host", "smtp.gmail.com");
@@ -48,12 +48,16 @@ public class EnvioMensajes {
 		
 		try {
 			BodyPart texto = new MimeBodyPart();
-			texto.setText(contenido);
-			BodyPart adjunto = new MimeBodyPart();
-			adjunto.setDataHandler(new DataHandler(new FileDataSource("D:/JmYo.jpg")));
+			texto.setText(contenido);			
 			MimeMultipart m = new MimeMultipart();
 			m.addBodyPart(texto);
-			m.addBodyPart(adjunto);		
+                        
+                        if(!mArchivo.equals("")){
+                        BodyPart adjunto = new MimeBodyPart();
+			adjunto.setDataHandler(new DataHandler(new FileDataSource(mArchivo)));
+                        adjunto.setFileName(mArchivo);
+			m.addBodyPart(adjunto);
+                        }
 			
 			mCorreo = new MimeMessage(mSession);
 			mCorreo.setFrom(new InternetAddress(emailEnvia));
@@ -71,7 +75,7 @@ public class EnvioMensajes {
 		try {
 			Transport mTransport = mSession.getTransport("smtp");
 			mTransport.connect(emailEnvia, passwordEnvia);
-			mTransport.sendMessage(mCorreo, mCorreo.getRecipients(Message.RecipientType.TO));
+			mTransport.sendMessage(mCorreo, mCorreo.getAllRecipients());
 			mTransport.close();
 			
 			System.out.println("Correo enviado correctamente a " + correo +"!");
@@ -84,17 +88,19 @@ public class EnvioMensajes {
 	}
 	
 
-	    static List<String> correos = new ArrayList<>();
-            
+        static List<String> correos = new ArrayList<>();
 	
-	public static void enviarCorreosMasivos(List<String> correos, String asunto, String mensaje) {
+	public static void enviarCorreosMasivos(List<String> correos, String asunto, String mensaje, String archivo) {
 		 for(String correo:correos) {
-			   crearEmail(correo, asunto, mensaje);
+			   crearEmail(correo, asunto, mensaje, archivo);
 			   enviarEmail(correo);
 		   }	
 		 }
         
     public static void main(String[] args) {
-        enviarCorreosMasivos(correos, "Mensaje de Prueba", "Contenido del mensaje");
+//        correos.add("josemariaaguilar899@gmail.com");
+//        enviarCorreosMasivos(correos, "Mensaje de Prueba", "Contenido del mensaje", "C:/Users/51992/Desktop/logo.png");
+                 new formEnvioMensaje().setVisible(true);
+
     }
 }
